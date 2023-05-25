@@ -11,5 +11,10 @@ describe "Ship" do
             expect(cruiser.health).to eq(cruiser.length)
         end
     end
-    
+    describe '#sunk?' do
+        it "can check if ship has been destroyed" do
+            cruiser = Ship.new("Cruiser", 3)
+            expect(cruiser.sunk?).to eq(false)
+        end
+    end
 end
