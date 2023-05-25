@@ -28,5 +28,14 @@ describe "Cell" do
       expect(cell.empty?).to eq(false)
     end
   end
+
+  describe "#fired_upon?" do 
+    it "allows a cell to be hit" do 
+      cell = Cell.new("B4")
+      cruiser = Ship.new("Cruiser", 3)
+      cell.place_ship(cruiser)
+      expect(cell.fired_upon?).to eq(false)
+    end
+  end
 end
 
