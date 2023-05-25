@@ -10,4 +10,6 @@ class Cell
   def empty? 
     !@ship
   end
+
+  
 end
