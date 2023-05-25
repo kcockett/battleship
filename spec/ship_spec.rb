@@ -17,4 +17,12 @@ describe "Ship" do
             expect(cruiser.sunk?).to eq(false)
         end
     end
+    describe '#hit' do
+        it "damage a ship" do
+            cruiser = Ship.new("Cruiser", 3)
+            expect(cruiser.health).to eq(3)
+            cruiser.hit
+            expect(cruiser.health).to eq(2)
+        end
+    end
 end
