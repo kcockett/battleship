@@ -37,5 +37,18 @@ describe "Cell" do
       expect(cell.fired_upon?).to eq(false)
     end
   end
+
+  describe "#fire_upon" do 
+    it "changes cell status to fired_upon" do 
+      cell = Cell.new("B4")
+      cruiser = Ship.new("Cruiser", 3)
+      cell.place_ship(cruiser)
+      expect(cell.fired_upon?).to eq(false)
+      expect(cell.ship.health).to eq(3)
+      cell.fire_upon
+      expect(cell.ship.health).to eq(2)
+      expect(cell.fired_upon?).to eq(true)
+    end
+  end
 end
 

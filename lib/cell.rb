@@ -20,4 +20,6 @@ class Cell
     @fired_upon
   end
 
+  def 
+
 end
