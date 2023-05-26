@@ -25,11 +25,23 @@ class Cell
     @ship.hit if @ship != nil
   end
 
-  def render 
-    if @fired_upon == false
-      "."
-    else 
-      "M"
+  def render(show_ships = false)
+    if @fired_upon == false   #if not shot, should only return "S" or "."
+      if show_ships == true && @ship != nil
+        "S"
+      else
+        "."
+      end
+    else  #if is shot should return "M" "X" or "H"
+      if @ship == nil 
+       "M"
+      else 
+        if @ship.sunk? == true
+          "X"
+        else
+          "H"
+        end
+      end
     end
   end
 end

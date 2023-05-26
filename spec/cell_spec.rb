@@ -61,7 +61,14 @@ describe "Cell" do
       cruiser = Ship.new("Cruiser", 3)
       cell_2.place_ship(cruiser)
       expect(cell_2.render).to eq(".")
-      
+      expect(cell_2.render(true)).to eq("S")
+      cell_2.fire_upon
+      expect(cell_2.render).to eq("H")
+      expect(cruiser.sunk?).to eq(false)
+      cruiser.hit
+      cruiser.hit
+      expect(cruiser.sunk?).to eq(true)
+      expect(cell_2.render).to eq("X")
     end
   end
 end
