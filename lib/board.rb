@@ -50,4 +50,5 @@ class Board
       false #everything else invalid 
     end
   end
+
 end
