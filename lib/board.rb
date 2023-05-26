@@ -30,8 +30,24 @@ class Board
   end
 
   def valid_placement?(ship,coordinates)
-    ship.length == coordinates.length
+    ship.length == coordinates.length && consecutive_placement?(coordinates)
   end
 
- 
+  def consecutive_placement?(coordinates)
+    letters = []
+    numbers = []
+    coordinates.each do |coordinate| 
+      letters << coordinate.chr 
+      numbers << coordinate.chars.last
+    end
+    if letters.uniq.size == 1 
+      #confirms horizontal
+      numbers.each_cons(2).all? {|a,b| b == a.succ}
+    elsif numbers.uniq.size == 1 
+      #confirms vertical
+      letters.each_cons(2).all? {|a,b| b == a.succ}
+    else
+      false #everything else invalid 
+    end
+  end
 end
