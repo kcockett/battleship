@@ -22,4 +22,13 @@ describe "Board" do
       expect(board.valid_coordinate?("A22")).to eq(false)
     end
   end
+  describe "#valid_placement?" do 
+    it "can check number of coordinates is same as ship" do 
+      board = Board.new
+      cruiser = Ship.new("Cruiser", 3)
+      submarine = Ship.new("Submarine", 2)
+      expect(board.valid_placement?(cruiser, ["A1", "A2",])).to eq(false)
+      expect(board.valid_placement?(submarine, ["A2", "A3", "A4"])).to eq(false)
+    end
+  end
 end
