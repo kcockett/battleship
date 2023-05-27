@@ -30,7 +30,9 @@ class Board
   end
 
   def valid_placement?(ship,coordinates)
-    ship.length == coordinates.length && consecutive_placement?(coordinates)
+      !occupied?(coordinates) &&
+      ship.length == coordinates.length && 
+      consecutive_placement?(coordinates)
   end
 
   def consecutive_placement?(coordinates)
@@ -48,6 +50,12 @@ class Board
       letters.each_cons(2).all? {|a,b| b == a.succ}
     else
       false #everything else invalid 
+    end
+  end
+
+  def occupied?(coordinates)
+    coordinates.any? do |coordinate|
+      !@cells[coordinate].empty?
     end
   end
 

@@ -62,5 +62,12 @@ describe "Board" do
       expect(cell_3.ship).to eq(@cruiser)
       expect(cell_3.ship == cell_2.ship).to eq(true)
     end
+    it 'checks for overlapping placement' do
+      @submarine = Ship.new("Submarine", 2)
+      @board.place(@cruiser, ["A1", "A2", "A3"])
+      #require 'pry'; binding.pry
+      expect(@board.valid_placement?(@submarine, ["A1", "B1"])).to eq(false)
+      expect(@board.valid_placement?(@submarine, ["B1", "C1"])).to eq(true)
+    end
   end
 end
