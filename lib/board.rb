@@ -67,4 +67,23 @@ class Board
       end
     end
   end
+
+  def render(show_ships = false)
+    output = "  1 2 3 4 \n"
+    row = "A"
+  @cells.values.each_slice(4) do |cell|
+    output << row + " "
+    cell.each do |value|
+      output << value.render(show_ships) + " "
+    end
+    output << "\n"
+    row = row.succ
+  end
+    # output = "  1 2 3 4 \n" +
+    # "A . . . . \n" +
+    # "B . . . . \n" +
+    # "C . . . . \n" +
+    # "D . . . . \n"
+    output
+  end
 end
