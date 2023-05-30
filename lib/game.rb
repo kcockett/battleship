@@ -13,6 +13,26 @@ class Game
     @player_submarine = Ship.new("Submarine", 2)
     @computer_cruiser = Ship.new("Cruiser", 3)
     @computer_submarine = Ship.new("Submarine", 2)
-    #game.main_menu
+    game.main_menu
+  end
+
+  def main_menu
+    puts "Welcome to BATTLESHIP"
+    puts "Enter p to play.  Enter q to quit."
+    until player_response == "p" || "q"
+      player_response == gets.chomp
+        puts "Sorry, invalid selection.  Please try again."
+      end
+      if  player_response == "p"
+        # Start the game setup
+      elsif player_response == "q"
+        game.good_bye
+      else
+    end
+  end
+
+  def good_bye
+    puts "Thanks for playing"
+    exit
   end
 end

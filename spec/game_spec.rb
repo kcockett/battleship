@@ -16,7 +16,7 @@ describe 'Game' do
   end
   describe '#main_menu' do
     it 'should generate greeting message' do
-      # No tests expected
+      game.main_menu
     end
   end
 end
