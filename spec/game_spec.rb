@@ -12,11 +12,18 @@ describe 'Game' do
       expect(game.player_submarine.name).to eq("Submarine")
       expect(game.computer_submarine.name).to eq("Submarine")
       expect(game.computer_cruiser.name).to eq("Cruiser")
+      expect(game.computer_board).to be_a(Board)
+      expect(game.player_board).to be_a(Board)
     end
   end
-  # describe '#main_menu' do
-  #   it 'should generate greeting message' do
-  #     game.main_menu
-  #   end
-  # end
+
+  describe '#start_ship_placement' do
+    it "should place computer ships" do
+      game = Game.new
+      game.start_ship_placement
+      # How to test valid computer placements
+    end
+  end
+
+  
 end

@@ -3,6 +3,10 @@
 # require './lib/board'
 # require './lib/cell'
 
+# available_ships = {}
+# available_ships["Cruiser"] = 3
+# available_ships["Submarine"] = 2
+
 puts "Welcome to BATTLESHIP"
 puts "Enter p to play.  Enter q to quit."
 #player_response = ""
