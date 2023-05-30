@@ -13,7 +13,6 @@ class Game
     @player_submarine = Ship.new("Submarine", 2)
     @computer_cruiser = Ship.new("Cruiser", 3)
     @computer_submarine = Ship.new("Submarine", 2)
-    #game.main_menu
   end
 
   # def main_menu
