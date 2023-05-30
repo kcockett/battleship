@@ -14,4 +14,9 @@ describe 'Game' do
       expect(game.computer_cruiser.name).to eq("Cruiser")
     end
   end
+  describe '#main_menu' do
+    it 'should generate greeting message' do
+      # No tests expected
+    end
+  end
 end
