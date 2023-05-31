@@ -21,6 +21,8 @@ loop do
   else
     puts "Sorry, invalid selection.  Please try again."
   end
+    puts "Would you like to play again?"
+    puts "Enter p to play.  Enter q to quit." 
 end
 
 puts "Thanks for playing"

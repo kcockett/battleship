@@ -118,6 +118,10 @@ class Game
   
   def take_turns 
     loop do
+      puts " "
+      puts " "
+      puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~NEW~TURN~~~~~~~~~~~~~~~~~~~~~~~~~"
+      puts " "
       #display boards
       puts "=============COMPUTER BOARD============="
       puts @computer_board.render
@@ -127,10 +131,12 @@ class Game
       #Player Shot
       puts "Enter the coordinate for your shot:"
       loop do 
-        player_pick = gets.chomp.upcase 
-        if @player_board.valid_coordinate?(player_pick)
-          if !@computer_board.cells.fired_upon?(player_pick)
+        @player_pick = gets.chomp.upcase 
+        if @player_board.valid_coordinate?(@player_pick)
+          if @computer_board.cells[@player_pick].fired_upon? == false
             break 
+          else
+            puts "You've already shot there before!"
           end
         end
         puts "Please enter a valid coordinate:"
@@ -140,35 +146,34 @@ class Game
       loop do 
         row_pick = rand(65..68).chr
         column_pick = rand(1..4)
-        computer_pick = row_pick + column_pick
-        break if !@computer_board.cells[computer_pick].fired_upon?
-        end
+        @computer_pick = "#{row_pick}#{column_pick}"
+        break if @player_board.cells[@computer_pick].fired_upon? == false
       end
 
       #results
-      @computer_board.cells[player_pick].fire_upon
-      @player_board.cells[computer_pick].fire_upon
-      if @computer_board.cell[player_pick].empty? 
+      @computer_board.cells[@player_pick].fire_upon
+      @player_board.cells[@computer_pick].fire_upon
+      if @computer_board.cells[@player_pick].empty? 
         player_result = "miss"
       else
         player_result = "hit"
       end
-      if @player_board.cell[computer_pick].empty? 
+      if @player_board.cells[@computer_pick].empty? 
         computer_result = "miss"
       else
         computer_result = "hit"
       end
-      puts "Your shot on #{player_pick} was a #{player_result}."
-      if !@computer_board.cells[player_pick].empty? 
-        puts "You've hit my #{@computer_board.cells[player_pick].ship.name}"
-        if @computer_board.cells[player_pick].ship.sunk?
+      puts "Your shot on #{@player_pick} was a #{player_result}."
+      if @computer_board.cells[@player_pick].empty? == false
+        puts "You've hit my #{@computer_board.cells[@player_pick].ship.name}"
+        if @computer_board.cells[@player_pick].ship.sunk?
           puts "...and you've sunk it!"
         end
       end
-      puts "My shot on #{computer_pick} was a #{computer_result}."
-      if !@player_board.cells[computer_pick].empty? 
-        puts "I've hit your #{@player_board.cells[computer_pick].ship.name}"
-        if @player_board.cells[computer_pick].ship.sunk?
+      puts "My shot on #{@computer_pick} was a #{computer_result}."
+      if @player_board.cells[@computer_pick].empty? == false
+        puts "I've hit your #{@player_board.cells[@computer_pick].ship.name}"
+        if @player_board.cells[@computer_pick].ship.sunk?
           puts "...and I've sunk it!"
         end
       end
@@ -178,10 +183,16 @@ class Game
 
   def winner?
     if @player_cruiser.sunk? && @player_submarine.sunk? 
-      puts "Haha, better luck next time HUMAN! I win!"
+      puts "---------------------------------------------"
+      puts "| Haha, better luck next time HUMAN! I win! |"
+      puts "---------------------------------------------"
+      puts " "
       true
     elsif @computer_cruiser.sunk? && @computer_submarine.sunk? 
-      puts "Congratulations, you win!"
+      puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      puts "|   Congratulations, you win!   |"
+      puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      puts " "
       true
     else
       false
