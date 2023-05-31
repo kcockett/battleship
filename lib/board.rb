@@ -1,4 +1,4 @@
-require './cell.rb'
+require './lib/cell'
 #require './lib/ship'
 
 class Board
@@ -26,13 +26,21 @@ class Board
   end
 
   def valid_coordinate?(coordinate)
-    @cells.has_key?(coordinate)
+    if coordinate.is_a?(String)
+      @cells.has_key?(coordinate)
+    elsif coordinate.is_a?(Array)
+      #Iterate through the array
+      coordinate.all? do |coordinate|
+        @cells.has_key?(coordinate)
+      end
+    end
   end
 
   def valid_placement?(ship,coordinates)
-      !occupied?(coordinates) &&
-      ship.length == coordinates.length && 
-      consecutive_placement?(coordinates)
+    
+    ship.length == coordinates.length && 
+    !occupied?(coordinates) &&
+    consecutive_placement?(coordinates)
   end
 
   def consecutive_placement?(coordinates)
