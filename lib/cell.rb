@@ -12,8 +12,8 @@ class Cell
     !@ship
   end
 
-  def place_ship(ship)
-    @ship = ship
+  def place_ship(new_ship)
+    @ship = new_ship
   end
 
   def fired_upon? 
@@ -26,22 +26,10 @@ class Cell
   end
 
   def render(show_ships = false)
-    if @fired_upon == false   #if not shot, should only return "S" or "."
-      if show_ships == true && @ship != nil
-        "S"
-      else
-        "."
-      end
-    else  #if is shot should return "M" "X" or "H"
-      if @ship == nil 
-       "M"
-      else 
-        if @ship.sunk? == true
-          "X"
-        else
-          "H"
-        end
-      end
-    end
+    return "S" if !@fired_upon && show_ships && @ship
+    return "." if !@fired_upon
+    return "M" if !@ship 
+    return "X" if @ship.sunk?
+    "H"
   end
 end
