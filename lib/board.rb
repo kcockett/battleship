@@ -37,7 +37,6 @@ class Board
   end
 
   def valid_placement?(ship,coordinates)
-    
     ship.length == coordinates.length && 
     !occupied?(coordinates) &&
     consecutive_placement?(coordinates)
