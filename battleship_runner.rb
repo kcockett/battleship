@@ -1,7 +1,7 @@
 require './lib/game'
-# require './lib/ship'
-# require './lib/board'
-# require './lib/cell'
+require './lib/ship'
+require './lib/board'
+require './lib/cell'
 
 # available_ships = {}
 # available_ships["Cruiser"] = 3
@@ -24,3 +24,4 @@ loop do
 end
 
 puts "Thanks for playing"
+

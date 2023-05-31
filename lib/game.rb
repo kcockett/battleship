@@ -22,6 +22,7 @@ class Game
   def start_ship_placement
     self.computer_ship_setup
     self.player_ship_setup
+    #run the game
   end
   
   def computer_ship_setup
@@ -92,22 +93,24 @@ class Game
     # input ship and coordinates
     loop do
       puts "Enter the squares for the Cruiser (3 spaces):"
-      require 'pry'; binding.pry
+      #require 'pry'; binding.pry
       player_picks = gets.upcase.chomp.split(" ")
-      if @player_board.valid_placement?(@player_cruiser, player_picks) == true
+      if @player_board.valid_coordinate?(player_picks) && @player_board.valid_placement?(@player_cruiser, player_picks) == true
         @player_board.place(@player_cruiser, player_picks)
         break
       end
+      puts "Those are invalid coordinates.  Please try again"
     end
     puts @player_board.render(true)
 
     loop do
       puts "Enter the squares for the Submarine (2 spaces):"
       player_picks = gets.chomp.upcase.split(" ")
-      if @player_board.valid_placement?(@player_cruiser, player_picks) == true
+      if @player_board.valid_coordinate?(player_picks) && @player_board.valid_placement?(@player_submarine, player_picks) == true
         @player_board.place(@player_submarine, player_picks)
         break
       end
+      puts "Those are invalid coordinates.  Please try again"
     end
     puts @player_board.render(true)
   end
