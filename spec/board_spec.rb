@@ -20,6 +20,9 @@ describe "Board" do
       expect(board.valid_coordinate?("A5")).to eq(false)
       expect(board.valid_coordinate?("E1")).to eq(false)
       expect(board.valid_coordinate?("A22")).to eq(false)
+      expect(board.valid_coordinate?(["A2", "A3", "A4"])).to eq(true)
+      expect(board.valid_coordinate?(["A2", "A31", "A4"])).to eq(false)
+
     end
   end
   describe "#valid_placement?" do 

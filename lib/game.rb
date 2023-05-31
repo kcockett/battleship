@@ -20,10 +20,9 @@ class Game
   end
 
   def start_ship_placement
-    self.computer_ship_setup
-    self.player_ship_setup
-    #run the game
-    self.take_turns
+    computer_ship_setup
+    player_ship_setup
+    take_turns
   end
   
   def computer_ship_setup
@@ -94,9 +93,8 @@ class Game
     # input ship and coordinates
     loop do
       puts "Enter the squares for the Cruiser (3 spaces):"
-      #require 'pry'; binding.pry
       player_picks = gets.upcase.chomp.split(" ")
-      if @player_board.valid_coordinate?(player_picks) && @player_board.valid_placement?(@player_cruiser, player_picks) == true
+      if @player_board.valid_coordinate?(player_picks) && @player_board.valid_placement?(@player_cruiser, player_picks)
         @player_board.place(@player_cruiser, player_picks)
         break
       end
@@ -107,7 +105,7 @@ class Game
     loop do
       puts "Enter the squares for the Submarine (2 spaces):"
       player_picks = gets.chomp.upcase.split(" ")
-      if @player_board.valid_coordinate?(player_picks) && @player_board.valid_placement?(@player_submarine, player_picks) == true
+      if @player_board.valid_coordinate?(player_picks) && @player_board.valid_placement?(@player_submarine, player_picks)
         @player_board.place(@player_submarine, player_picks)
         break
       end
@@ -127,68 +125,72 @@ class Game
       puts @computer_board.render
       puts "==============PLAYER BOARD=============="
       puts @player_board.render(true)
+      puts " "
 
-      #Player Shot
+      # Player Shot
       puts "Enter the coordinate for your shot:"
       loop do 
         @player_pick = gets.chomp.upcase 
-        if @player_board.valid_coordinate?(@player_pick)
-          if @computer_board.cells[@player_pick].fired_upon? == false
-            break 
-          else
-            puts "You've already shot there before!"
-          end
+        if @player_board.valid_coordinate?(@player_pick) # Validicate the entry
+          break if !@computer_board.cells[@player_pick].fired_upon? # Check for duplicate shot
+          puts "You've already shot there before!"
         end
         puts "Please enter a valid coordinate:"
       end
 
-      #Computer Shot
+      # Computer Shot
       loop do 
         row_pick = rand(65..68).chr
         column_pick = rand(1..4)
         @computer_pick = "#{row_pick}#{column_pick}"
-        break if @player_board.cells[@computer_pick].fired_upon? == false
+        break if !@player_board.cells[@computer_pick].fired_upon?
       end
 
-      #results
-      @computer_board.cells[@player_pick].fire_upon
+      # Results
+      @computer_board.cells[@player_pick].fire_upon # Record hits
       @player_board.cells[@computer_pick].fire_upon
-      if @computer_board.cells[@player_pick].empty? 
+      
+      if @computer_board.cells[@player_pick].empty? # Check player shot
         player_result = "miss"
       else
         player_result = "hit"
       end
-      if @player_board.cells[@computer_pick].empty? 
+
+      if @player_board.cells[@computer_pick].empty? # Check computer shot
         computer_result = "miss"
       else
         computer_result = "hit"
       end
-      puts "Your shot on #{@player_pick} was a #{player_result}."
-      if @computer_board.cells[@player_pick].empty? == false
+
+      puts "Your shot on #{@player_pick} was a #{player_result}." # Player shot response
+      if !@computer_board.cells[@player_pick].empty?
         puts "You've hit my #{@computer_board.cells[@player_pick].ship.name}"
-        if @computer_board.cells[@player_pick].ship.sunk?
-          puts "...and you've sunk it!"
-        end
+        puts "...and you've sunk it!" if @computer_board.cells[@player_pick].ship.sunk?
       end
+
       puts "My shot on #{@computer_pick} was a #{computer_result}."
-      if @player_board.cells[@computer_pick].empty? == false
+      if !@player_board.cells[@computer_pick].empty?
         puts "I've hit your #{@player_board.cells[@computer_pick].ship.name}"
-        if @player_board.cells[@computer_pick].ship.sunk?
-          puts "...and I've sunk it!"
-        end
+        puts "...and I've sunk it!" if @player_board.cells[@computer_pick].ship.sunk?
       end
-      break if self.winner?
-    end
+      break if winner? # Stop the game if there is a winner
+    end # Repeat everything if there is NO winner
   end
 
   def winner?
-    if @player_cruiser.sunk? && @player_submarine.sunk? 
+    if @player_cruiser.sunk? && @player_submarine.sunk? && @computer_cruiser.sunk? && @computer_submarine.sunk? # This is a tie
+      puts "---------------------------------------------"
+      puts "|    What are the chances?  It's a TIE!     |"
+      puts "---------------------------------------------"
+      puts " "
+      true
+    elsif @player_cruiser.sunk? && @player_submarine.sunk? # Computer wins
       puts "---------------------------------------------"
       puts "| Haha, better luck next time HUMAN! I win! |"
       puts "---------------------------------------------"
       puts " "
       true
-    elsif @computer_cruiser.sunk? && @computer_submarine.sunk? 
+    elsif @computer_cruiser.sunk? && @computer_submarine.sunk? # Player wins
       puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       puts "|   Congratulations, you win!   |"
       puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
