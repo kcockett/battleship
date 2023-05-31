@@ -21,6 +21,7 @@ class Game
 
   def start_ship_placement
     self.computer_ship_setup
+    self.player_ship_setup
   end
   
   def computer_ship_setup
@@ -87,32 +88,35 @@ class Game
   
   def player_ship_setup
     # place ships on the board
+    # pick a ship - Cruiser
+    # input ship and coordinates
+    loop do
+      puts "Enter the squares for the Cruiser (3 spaces):"
+      require 'pry'; binding.pry
+      player_picks = gets.upcase.chomp.split(" ")
+      if @player_board.valid_placement?(@player_cruiser, player_picks) == true
+        @player_board.place(@player_cruiser, player_picks)
+        break
+      end
+    end
+    puts @player_board.render(true)
 
-      # pick a ship
-        # input ship and coordinates
-        # check if ship placement is valid
-      # repeat for all ships
+    loop do
+      puts "Enter the squares for the Submarine (2 spaces):"
+      player_picks = gets.chomp.upcase.split(" ")
+      if @player_board.valid_placement?(@player_cruiser, player_picks) == true
+        @player_board.place(@player_submarine, player_picks)
+        break
+      end
+    end
+    puts @player_board.render(true)
   end
+  
+  # pick a ship
+    # input ship and coordinates
+    # check if ship placement is valid
+  # repeat for all ships
+  
 
-  # def main_menu
-  #   puts "Welcome to BATTLESHIP"
-  #   puts "Enter p to play.  Enter q to quit."
-  #   until player_response == "p" || "q"
-  #     player_response == gets.chomp
-  #       puts "Sorry, invalid selection.  Please try again."
-  #     end
-  #     if  player_response == "p"
-  #       # Start the game setup
-  #       game = Game.new
-  #       #
-  #     elsif player_response == "q"
-  #       game.good_bye
-  #     end
-  #   end
-  # end
 
-  # def good_bye
-  #   puts "Thanks for playing"
-  #   exit
-  # end
 end

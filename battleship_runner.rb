@@ -1,4 +1,4 @@
-# require './lib/game'
+require './lib/game'
 # require './lib/ship'
 # require './lib/board'
 # require './lib/cell'
@@ -15,7 +15,7 @@ loop do
   
   if  player_response == "p"
     game = Game.new 
-    game.start_setup
+    game.start_ship_placement
   elsif player_response == "q"
     break
   else
