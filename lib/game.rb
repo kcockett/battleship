@@ -105,17 +105,8 @@ class Game
       @computer_board.cells[@player_pick].fire_upon # Record hits
       @player_board.cells[@computer_pick].fire_upon
       
-      if @computer_board.cells[@player_pick].empty? # Check player shot
-        player_result = "miss"
-      else
-        player_result = "hit"
-      end
-
-      if @player_board.cells[@computer_pick].empty? # Check computer shot
-        computer_result = "miss"
-      else
-        computer_result = "hit"
-      end
+      player_result = @computer_board.cells[@player_pick].empty? ? "miss" : "hit" # Conditional ternary operator
+      computer_result = @player_board.cells[@computer_pick].empty? ? "miss" : "hit"
 
       puts "Your shot on #{@player_pick} was a #{player_result}." # Player shot response
       if !@computer_board.cells[@player_pick].empty?
