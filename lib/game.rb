@@ -129,18 +129,21 @@ class Game
       puts "|    What are the chances?  It's a TIE!     |"
       puts "---------------------------------------------"
       puts " "
+      `say -r 90 -v Fred "What are the chances?  It's a TIE! "`
       true
     elsif @player_ships.all? { |ship| ship.sunk?} # Computer wins
       puts "---------------------------------------------"
       puts "| Haha, better luck next time HUMAN! I win! |"
       puts "---------------------------------------------"
       puts " "
+      `say -r 90 -v Fred "Haha, better luck next time HUMAN! I win!"`
       true
     elsif @computer_ships.all? { |ship| ship.sunk?} # Player wins
       puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       puts "|   Congratulations, you win!   |"
       puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       puts " "
+      `say -r 90 -v Fred "Congratulations, you win! "`
       true
     else
       false
