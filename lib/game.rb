@@ -46,7 +46,7 @@ class Game
           end
         end
         # Validate placement or randomize again
-        if @computer_board.valid_placement?(ship, coordinates) == true
+        if @computer_board.valid_placement?(ship, coordinates)
           @computer_board.place(ship, coordinates)
           break
         end
