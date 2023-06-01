@@ -1,8 +1,9 @@
-require './lib/cell'
 require './lib/ship'
 require './lib/board'
+require './lib/sayable'
 
 class Game
+  include Sayable
 
   attr_reader :player_cruiser, 
               :player_submarine, 
@@ -129,21 +130,21 @@ class Game
       puts "|    What are the chances?  It's a TIE!     |"
       puts "---------------------------------------------"
       puts " "
-      `say -r 90 -v Fred "What are the chances?  It's a TIE! "`
+      say("What are the chances?  It's a TIE!")
       true
     elsif @player_ships.all? { |ship| ship.sunk?} # Computer wins
       puts "---------------------------------------------"
-      puts "| Haha, better luck next time HUMAN! I win! |"
+      puts "| Ha-ha-ha, better luck next time HUMAN! I win! |"
       puts "---------------------------------------------"
       puts " "
-      `say -r 90 -v Fred "Haha, better luck next time HUMAN! I win!"`
+      say("Ha-ha-ha, better luck next time HUMAN! I win!")
       true
     elsif @computer_ships.all? { |ship| ship.sunk?} # Player wins
       puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       puts "|   Congratulations, you win!   |"
       puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       puts " "
-      `say -r 90 -v Fred "Congratulations, you win! "`
+      say("Congratulations, you win! ")
       true
     else
       false

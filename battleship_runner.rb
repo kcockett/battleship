@@ -1,13 +1,9 @@
 require './lib/game'
-require './lib/ship'
-require './lib/board'
-require './lib/cell'
-require './lib/sayable'
 include Sayable
 
 puts "Welcome to BATTLESHIP"
 puts "Enter p to play.  Enter q to quit."
-`say -r 90 -v Fred "Welcome to BATTLESHIP"`
+say("Welcome to BATTLESHIP")
 loop do
   player_response = gets.downcase.chomp
   
@@ -21,7 +17,8 @@ loop do
   end
     puts "Would you like to play again?"
     puts "Enter p to play.  Enter q to quit." 
+    say("Would you like to play again?")
 end
 
 puts "Thanks for playing"
-`say -r 90 -v Fred "Thanks for playing"`
+say("Thanks for playing")

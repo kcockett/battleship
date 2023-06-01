@@ -1,10 +1,8 @@
 module Sayable
 
-  def self.say(sentence)
-    require 'pry'; binding.pry
-    beats = list.to_string
+  def say(message)
     rate = 80
     voice = "Fred"
-    `say -r #{rate} -v #{voice} #{sentence}`
+    `say -r #{rate} -v #{voice} #{message}`
   end
 end
