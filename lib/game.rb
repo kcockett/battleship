@@ -4,31 +4,66 @@ require './lib/board'
 
 class Game
 
-  attr_reader :player_cruiser, 
-              :player_submarine, 
-              :computer_cruiser, 
-              :computer_submarine,
-              :computer_board,
-              :player_board
+  attr_reader :computer_board,
+              :player_board,
+              :board_column_size,
+              :board_row_size
   def initialize
     @player_ships = [Ship.new("Cruiser", 3), Ship.new("Submarine", 2)]
     @computer_ships = [Ship.new("Cruiser", 3), Ship.new("Submarine", 2)]
-    @player_board = Board.new
-    @computer_board = Board.new
+    @board_column_size = 0
+    @board_row_size = 0
   end
 
-  def start_ship_placement
+  def start_game
+    choose_board_size
     computer_ship_setup
     player_ship_setup
     take_turns
+  end
+
+  def choose_board_size
+    puts " "
+    puts "Please choose your board size"
+    @board_column_size = get_valid_board_size("columns")
+    puts " "
+    @board_row_size = get_valid_board_size("rows")
+    cells_hash = create_cells
+    @player_board = Board.new(cells_hash)
+    @computer_board = Board.new(cells_hash)
+  end
+  
+  def get_valid_board_size(direction)
+    loop do
+      puts "How many #{direction} would you like? (up to 26)"
+      size = gets.chomp.to_i
+      return size if size.between?(1, 26)
+      puts "Please enter a valid board size (1 - 26)"
+    end
+  end
+  
+  def create_cells
+    hash_of_cells = Hash.new
+    column = "1"
+    row = "A"
+    @board_row_size.times do
+      @board_column_size.times do
+        coordinate = "#{row}#{column}"
+        hash_of_cells[coordinate] = Cell.new(coordinate)
+        column = column.succ
+      end
+      column = 1
+      row = row.succ
+    end
+    hash_of_cells
   end
   
   def computer_ship_setup
     @computer_ships.each do |ship| # Iterate through all ships
       loop do # Pick ship placement
         if rand(1..2) == 1 # Pick horizontal orientation
-          row_pick = rand(65..68).chr
-          column_pick = rand(1..(5 - ship.length)) #Pick valid columns for ship size
+          row_pick = rand(65..(64 + @board_row_size)).chr
+          column_pick = rand(1..((@board_column_size + 1) - ship.length)) #Pick valid columns for ship size
           coordinates = []
           (ship.length).times do
             coordinate = "#{row_pick}#{column_pick}"
@@ -36,7 +71,7 @@ class Game
             column_pick = column_pick.succ
           end
         else # Pick vertical orientation
-          row_pick = rand(65..(69-ship.length)).chr #Pick valid row for ship size
+          row_pick = rand(65..((64 + @board_row_size) - ship.length)).chr #Pick valid row for ship size
           column_pick = rand(1..4)
           coordinates = []
           (ship.length).times do
@@ -46,7 +81,7 @@ class Game
           end
         end
         # Validate placement or randomize again
-        if @computer_board.valid_placement?(ship, coordinates) == true
+        if @computer_board.valid_placement?(ship, coordinates)
           @computer_board.place(ship, coordinates)
           break
         end
@@ -65,7 +100,7 @@ class Game
         end
         puts "Those are invalid coordinates.  Please try again"
       end
-      puts @player_board.render(true)
+      puts @player_board.render(true, @board_column_size, board_row_size)
     end
   end
   
@@ -77,9 +112,9 @@ class Game
       puts " "
       #display boards
       puts "=============COMPUTER BOARD============="
-      puts @computer_board.render
+      puts @computer_board.render(false, @board_column_size, @board_row_size)
       puts "==============PLAYER BOARD=============="
-      puts @player_board.render(true)
+      puts @player_board.render(true, @board_column_size, @board_row_size)
       puts " "
 
       # Player Shot

@@ -15,7 +15,7 @@ loop do
   
   if  player_response == "p"
     game = Game.new 
-    game.start_ship_placement
+    game.start_game
   elsif player_response == "q"
     break
   else
