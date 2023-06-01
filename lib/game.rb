@@ -11,10 +11,8 @@ class Game
               :computer_board,
               :player_board
   def initialize
-    @player_cruiser = Ship.new("Cruiser", 3)
-    @player_submarine = Ship.new("Submarine", 2)
-    @computer_cruiser = Ship.new("Cruiser", 3)
-    @computer_submarine = Ship.new("Submarine", 2)
+    @player_ships = [Ship.new("Cruiser", 3), Ship.new("Submarine", 2)]
+    @computer_ships = [Ship.new("Cruiser", 3), Ship.new("Submarine", 2)]
     @player_board = Board.new
     @computer_board = Board.new
   end
@@ -26,92 +24,49 @@ class Game
   end
   
   def computer_ship_setup
-    
-    loop do # Pick Cruiser placement
-      if rand(1..2) == 1 # pick horz/vertical
-        #HORIZONTAL
-        row_pick = rand(65..68).chr
-        column_pick = rand(1..(5-@computer_cruiser.length))
-        coordinates = []
-        (@computer_cruiser.length).times do
-          coordinate = "#{row_pick}#{column_pick}"
-          coordinates << coordinate
-          column_pick = column_pick.succ
+    @computer_ships.each do |ship| # Iterate through all ships
+      loop do # Pick ship placement
+        if rand(1..2) == 1 # Pick horizontal orientation
+          row_pick = rand(65..68).chr
+          column_pick = rand(1..(5 - ship.length)) #Pick valid columns for ship size
+          coordinates = []
+          (ship.length).times do
+            coordinate = "#{row_pick}#{column_pick}"
+            coordinates << coordinate
+            column_pick = column_pick.succ
+          end
+        else # Pick vertical orientation
+          row_pick = rand(65..(69-ship.length)).chr #Pick valid row for ship size
+          column_pick = rand(1..4)
+          coordinates = []
+          (ship.length).times do
+            coordinate = "#{row_pick}#{column_pick}"
+            coordinates << coordinate
+            row_pick = row_pick.succ
+          end
         end
-      else
-        #VERTICAL
-        row_pick = rand(65..(69-@computer_cruiser.length)).chr
-        column_pick = rand(1..4)
-        coordinates = []
-        (@computer_cruiser.length).times do
-          coordinate = "#{row_pick}#{column_pick}"
-          coordinates << coordinate
-          row_pick = row_pick.succ
+        # Validate placement or randomize again
+        if @computer_board.valid_placement?(ship, coordinates) == true
+          @computer_board.place(ship, coordinates)
+          break
         end
-      end
-      # Validate placement or randomize again
-      if @computer_board.valid_placement?(@computer_cruiser, coordinates) == true
-        @computer_board.place(@computer_cruiser, coordinates)
-        break
       end
     end
-
-    loop do # Pick Submarine placement
-      if rand(1..2) == 1
-        #HORIZONTAL
-        row_pick = rand(65..68).chr
-        column_pick = rand(1..(5-@computer_submarine.length))
-        coordinates = []
-        (@computer_submarine.length).times do
-          coordinate = "#{row_pick}#{column_pick}"
-          coordinates << coordinate
-          column_pick = column_pick.succ
-        end
-      else
-        #VERTICAL
-        row_pick = rand(65..(69-@computer_submarine.length)).chr
-        column_pick = rand(1..4)
-        coordinates = []
-        (@computer_submarine.length).times do
-          coordinate = "#{row_pick}#{column_pick}"
-          coordinates << coordinate
-          row_pick = row_pick.succ
-        end
-      end
-      # Validate placement or randomize again
-      if @computer_board.valid_placement?(@computer_submarine, coordinates) == true
-        @computer_board.place(@computer_submarine, coordinates)
-        break
-      end
-    end
-
   end
   
   def player_ship_setup
-    # place ships on the board
-    # pick a ship - Cruiser
-    # input ship and coordinates
-    loop do
-      puts "Enter the squares for the Cruiser (3 spaces):"
-      player_picks = gets.upcase.chomp.split(" ")
-      if @player_board.valid_coordinate?(player_picks) && @player_board.valid_placement?(@player_cruiser, player_picks)
-        @player_board.place(@player_cruiser, player_picks)
-        break
+    @player_ships.each do |ship| # Iterate through all ships
+      loop do
+        puts "Enter the squares for the #{ship.name} (#{ship.length} spaces):"
+        player_picks = gets.upcase.chomp.split(" ")
+        if @player_board.valid_coordinate?(player_picks) && @player_board.valid_placement?(ship, player_picks)
+          @player_board.place(ship, player_picks)
+          break
+        end
+        puts "Those are invalid coordinates.  Please try again"
       end
-      puts "Those are invalid coordinates.  Please try again"
+      puts @player_board.render(true)
     end
-    puts @player_board.render(true)
-
-    loop do
-      puts "Enter the squares for the Submarine (2 spaces):"
-      player_picks = gets.chomp.upcase.split(" ")
-      if @player_board.valid_coordinate?(player_picks) && @player_board.valid_placement?(@player_submarine, player_picks)
-        @player_board.place(@player_submarine, player_picks)
-        break
-      end
-      puts "Those are invalid coordinates.  Please try again"
-    end
-    puts @player_board.render(true)
   end
   
   def take_turns 
@@ -150,17 +105,8 @@ class Game
       @computer_board.cells[@player_pick].fire_upon # Record hits
       @player_board.cells[@computer_pick].fire_upon
       
-      if @computer_board.cells[@player_pick].empty? # Check player shot
-        player_result = "miss"
-      else
-        player_result = "hit"
-      end
-
-      if @player_board.cells[@computer_pick].empty? # Check computer shot
-        computer_result = "miss"
-      else
-        computer_result = "hit"
-      end
+      player_result = @computer_board.cells[@player_pick].empty? ? "miss" : "hit" # Conditional ternary operator
+      computer_result = @player_board.cells[@computer_pick].empty? ? "miss" : "hit"
 
       puts "Your shot on #{@player_pick} was a #{player_result}." # Player shot response
       if !@computer_board.cells[@player_pick].empty?
@@ -178,19 +124,19 @@ class Game
   end
 
   def winner?
-    if @player_cruiser.sunk? && @player_submarine.sunk? && @computer_cruiser.sunk? && @computer_submarine.sunk? # This is a tie
+    if @player_ships.all? { |ship| ship.sunk?} && @computer_ships.all? { |ship| ship.sunk?} # This is a tie
       puts "---------------------------------------------"
       puts "|    What are the chances?  It's a TIE!     |"
       puts "---------------------------------------------"
       puts " "
       true
-    elsif @player_cruiser.sunk? && @player_submarine.sunk? # Computer wins
+    elsif @player_ships.all? { |ship| ship.sunk?} # Computer wins
       puts "---------------------------------------------"
       puts "| Haha, better luck next time HUMAN! I win! |"
       puts "---------------------------------------------"
       puts " "
       true
-    elsif @computer_cruiser.sunk? && @computer_submarine.sunk? # Player wins
+    elsif @computer_ships.all? { |ship| ship.sunk?} # Player wins
       puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       puts "|   Congratulations, you win!   |"
       puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
