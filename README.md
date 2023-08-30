@@ -7,7 +7,7 @@
 
 **2. If you had one more day to work on this project, what would you work on?**
 
-> One more day would have allowed us to complete Iteration 4.  But, we wanted a nice holiday weekend so we made that sacrifice.
+> One more day would have allowed us to complete Iteration 4 to add flexibility to the map size and different kinds of ships.
 
 **3. Describe the pairing techniques you used while working on this project.**
 
